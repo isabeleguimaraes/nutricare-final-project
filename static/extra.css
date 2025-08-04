@@ -1,0 +1,181 @@
+.form-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5rem;
+    gap: 1rem;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: fit-content;
+}
+
+
+.input-container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 20rem;
+}
+
+input{
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid gray;
+    font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+}
+
+.radio-container{
+   display: flex;
+   justify-content: space-between;
+   gap: 2rem;
+}
+
+.radio-container label{
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.error{
+    color: rgb(218, 3, 3);
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-top: 4px;
+}
+
+.success{
+    color: rgb(7, 151, 63);
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-top: 4px;
+
+}
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* DASHBOARD PAGE */
+
+.main-content {
+    margin-left:50px;
+}
+.side-menu{
+    position: fixed;
+    padding: 2rem;
+    height: 60vh;
+    width: 12rem;
+    left: 0;
+    background-color: rgb(238, 238, 238);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    outline: 1px solid gray;
+    border-top-right-radius:  8px;
+    border-bottom-right-radius: 8px;
+
+}
+
+.blank{
+    font-size: 14px;
+}
+
+.top-options{
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.data{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.data-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    
+}
+
+.data-content{
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 20rem;
+    outline: 2px solid gray;
+    border-radius: 8px;
+    width: 100% ;
+}
+
+.request{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+
+/* Linking Page */
+
+i {
+    padding-right: 0.5rem;
+}
+
+.heading h2 p {
+    padding: 0;
+}
+
+.patient-linking {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Diet Page */
+
+.diet{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.combination {
+    display: flex;
+    flex-direction: column;
+}
+
+.combination input {
+    width: 200px;
+}
+
+
+.meal {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+

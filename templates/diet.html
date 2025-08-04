@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+
+<h2> Create a Diet </h2>
+<p> Create the combinations for each meal and let your patient know the quantity.</p>
+
+<form method="POST" action="{{url_for('diet', patient_id = patient_id)}}">
+    <input type="hidden" name="patient_id" value="{{ patient_id }}">
+    <section class="meal">
+        <h3> Breakfast </h3>
+        {% for j in range(1,4)%}
+        <section class = "combinations">
+            <div class="combination">
+                <label for="meal"> Combination {{j}}</label>
+                <div class="inputs"> 
+                    {% for i in range(1,5)%} 
+                        <input type="text" name="breakfast_{{j}}[]" placeholder="Item {{i}}">    
+                    {% endfor %} 
+                </div>
+            </div>
+        </section>   
+        {% endfor %}
+    </section>
+
+    <section class="meal">
+        <h3> Lunch </h3>
+        {% for j in range(1,4)%}
+        <section class = "combinations">
+            <div class="combination">
+                <label for="meal"> Combination {{j}}</label>
+                <div class="inputs"> 
+                    {% for i in range(1,5)%} 
+                        <input type="text" name="lunch_{{j}}[]" placeholder="Item {{i}}">    
+                    {% endfor %} 
+                </div>
+            </div>
+        </section>   
+        {% endfor %}
+    </section>
+
+    <section class="meal">
+        <h3> Dinner </h3>
+        {% for j in range(1,4)%}
+        <section class = "combinations">
+            <div class="combination">
+                <label for="meal"> Combination {{j}}</label>
+                <div class="inputs"> 
+                    {% for i in range(1,5)%} 
+                        <input type="text" name="dinner_{{j}}[]" placeholder="Item {{i}}">    
+                    {% endfor %} 
+                </div>
+            </div>
+        </section>   
+        {% endfor %}
+    </section>
+
+    <section class="meal">
+        <h3> Snacks </h3>
+        {% for j in range(1,4)%}
+        <section class = "combinations">
+            <div class="combination">
+                <label for="meal"> Combination {{j}}</label>
+                <div class="inputs"> 
+                    {% for i in range(1,5)%} 
+                        <input type="text" name="snacks_{{j}}[]" placeholder="Item {{i}}">    
+                    {% endfor %} 
+                </div>
+            </div>
+        </section>   
+        {% endfor %}
+    </section>
+
+    <button type="submit">Save Diet</button>
+</form>
+
+{% endblock %}

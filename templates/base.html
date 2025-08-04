@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <!-- Browser Configuration -->
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <!-- Page Title -->
+        <title> {% block title %} NutriCare {% endblock%} </title>
+
+        <!-- CSS Style -->
+        <link rel="stylesheet" href= "{{ url_for('static', filename='style.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='register.css') }}"/>
+
+        <!--Icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <!-- Favicon -->
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- JavaScript -->
+
+    </head>
+
+    <body>
+         <!-- Navigation Bar -->
+        <nav>
+            <!-- Navigation Login -->
+            <div class="nav-login">
+                {% if logged_in %}
+                    <a href="{{url_for('logout')}}" class="btn-primary">Log out</a>
+                {% else %}
+                    <a href="{{url_for('login')}}" class="btn-primary">Log in</a>
+                    <a href="{{url_for('register')}}" class="btn-link"> Sign Up</a>
+                {% endif %}
+            </div>
+            <!-- Right Space Empty Element -->
+            <div>
+            </div> 
+        </nav>
+
+        <main class="container">
+            {% block content %}
+            
+            {% endblock %}
+        </main>
+
+        
+    </body>
+</html>

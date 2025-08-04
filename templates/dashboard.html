@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+
+
+{% if user.role == 'nutritionist'%}
+<div class="side-menu">
+    <h3> Your Patients </h3>
+    {% if patients %}
+        <ul>
+        {% for patient in patients %}
+            <li>     
+                <a href="{{url_for('dashboard', patient_id = patient_id)}}">{{ patient.name }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="blank"> You don't have any associated patients. </p>
+        <a href="{{url_for('linking')}}"> Add Patient</a>
+
+    {% endif %}
+{% endif %}
+    
+
+</div>
+
+<section class="main-content">
+
+    <h2> Dashboard </h2>
+
+    <section>
+        {%if current_user.role == 'patient'%}
+        <h3> Requests </h3>
+        <div class="top-options">
+            {% if requests %}
+                    {% for request in requests %}
+                        <p> {{ request.name }} </p>
+                        <form class="request" action="{{url_for('dashboard')}}" method="POST">
+                            <input type="hidden" name="nutri_id" value="{{request.id}}">
+                            <button type="submit" name="action" value="accept"> Accept </button>
+                            <button type="submit" name="action" value="reject"> Reject </button>
+                        </form>
+                    {%endfor%}
+            {% else %}
+                <p> You don't have any requests </p>
+            {%endif%}
+        {%endif%}
+
+            {%if current_user.role == 'nutritionist'%}
+                <a href="{{url_for('linking')}}"> Add Patient </a>
+            {% endif %}
+        </div>
+    
+    </section>
+
+
+    <section class="data">
+
+        <div class="data-container">
+            <h3> Diet </h3>
+            <div class="data-content">
+            <!-- If Nutritionist -->
+               <!-- If diet exists -->
+                <p>content</p>
+                <!-- Else -->
+                 <a href="{{url_for('diet', patient_id = request.args.get('patient_id'))}}">Create Diet</a>
+            </div>
+        </div>
+
+        <div class="data-container">
+            <h3> Progress </h3>
+            <div class="data-content">
+                <p>content</p>
+            </div>
+        </div>
+
+        <div class="data-container">
+            <h3> Messages </h3>
+            <div class="data-content">
+                <p>content</p>
+            </div>
+        </div>
+ 
+    </section>
+</section>
+
+{% endblock %}

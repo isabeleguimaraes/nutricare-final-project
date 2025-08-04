@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+
+<section class="patient-linking">
+    <div class="heading">
+    <h2>Patient Registration</h2>
+    <p> Send a request to a patient to access their diet, progress and send messages.</p>
+</div>
+
+<form action="{{url_for('linking')}}" method="POST">
+    <input type="text" name="email" placeholder="Patient's email">
+    <button class="btn-primary" type="submit"> Send Request</button>
+    <p class="{{ msg_type }}"> {{ message }} </p>
+</form>
+
+
+
+<a class="btn-link" href="{{url_for('dashboard')}}"> <i class="fa-solid fa-arrow-left"></i> Return to Dashboard</a>
+</section>
+
+
+
+
+
+
+
+{% endblock %}
