@@ -58,3 +58,23 @@ def update_request(action, user, nutri):
         conn.commit()
         
     conn.close()
+
+# 
+
+def patient_diet(user_id, nutri_id):
+
+    # Open Connection
+    conn = sqlite3.connect('database/nutricare.db')
+    cursor = conn.cursor()
+
+    # Find Patient Diet Data
+    cursor.execute("""
+                    SELECT meal_type, option, item 
+                    FROM meals 
+                    JOIN diet ON meals.diet_id = diet.id
+                    WHERE diet.user_id = ? AND diet.nutri_id = ?
+                """, (user_id, nutri_id))
+    results = cursor.fetchall()
+    conn.close()
+
+    return [{"meal_type": result[0], "option": result[1], "item": result[2]} for result in results]

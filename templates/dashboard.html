@@ -61,9 +61,20 @@
         <div class="data-container">
             <h3> Diet </h3>
             <div class="data-content">
-            <!-- If Nutritionist -->
-               <!-- If diet exists -->
-                <p>content</p>
+            {% set meals = ['breakfast', 'lunch', 'dinner', 'snacks'] %}
+            {% for meal in meals %}
+
+            <h3>{{meal.capitalize()}}</h3>
+            
+                {% for i in range(1,4) %}
+                    <h3> Combination {{i}}</h3>
+                    {% for item in diet %}
+                            {%if item.meal_type == meal and item.option == i|string %}
+                                <p> {{ item.item }}</p>
+                            {%endif%}
+                    {%endfor%}
+                {%endfor%}
+            {%endfor%}
                 <!-- Else -->
                  <a href="{{url_for('diet', patient_id = request.args.get('patient_id'))}}">Create Diet</a>
             </div>

@@ -1,6 +1,6 @@
 from routes.auth import auth_bp, User
 import sqlite3
-from helpers import check_requests, check_patients, update_request
+from helpers import check_requests, check_patients, update_request, patient_diet
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -99,6 +99,8 @@ def index():
 @login_required
 def dashboard():
 
+    print("ROTA")
+
     # Check if there are any linked patients. Their names: show in the sidebar. Their IDs: create a URL for each
     patients = check_patients(current_user.id)
     
@@ -110,8 +112,13 @@ def dashboard():
         id = patients[0]['id']
         return redirect(url_for('dashboard', patient_id = id))
 
+    # Show patients diet
+    selected_patient_id = int(request.args.get('patient_id'))  
+    diet = patient_diet(selected_patient_id, current_user.id)
+
     if request.method == "POST":
 
+        # Handling User's answer to nutritionist request
         # Save Data from Form
         action = request.form.get("action")
         nutri_id = request.form.get("nutri_id")
@@ -120,10 +127,9 @@ def dashboard():
         # Update Request Status
         update_request(action, user_id, nutri_id)
 
-
         return redirect(url_for('dashboard'))
 
-    return render_template("dashboard.html", patients = patients, requests = requests)
+    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet)
     
 # Send Request Page
 @app.route("/linking", methods = ['GET', 'POST'])

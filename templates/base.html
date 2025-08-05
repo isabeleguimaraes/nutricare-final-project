@@ -11,7 +11,7 @@
 
         <!-- CSS Style -->
         <link rel="stylesheet" href= "{{ url_for('static', filename='style.css') }}"/>
-        <link rel="stylesheet" href= "{{ url_for('static', filename='register.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='extra.css') }}"/>
 
         <!--Icons-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -32,10 +32,10 @@
             <!-- Navigation Login -->
             <div class="nav-login">
                 {% if logged_in %}
-                    <a href="{{url_for('logout')}}" class="btn-primary">Log out</a>
+                    <a href="{{url_for('auth.logout')}}" class="btn-primary">Log out</a>
                 {% else %}
-                    <a href="{{url_for('login')}}" class="btn-primary">Log in</a>
-                    <a href="{{url_for('register')}}" class="btn-link"> Sign Up</a>
+                    <a href="{{url_for('auth.login')}}" class="btn-primary">Log in</a>
+                    <a href="{{url_for('auth.register')}}" class="btn-link"> Sign Up</a>
                 {% endif %}
             </div>
             <!-- Right Space Empty Element -->
