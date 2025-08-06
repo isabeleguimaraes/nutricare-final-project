@@ -9,69 +9,30 @@
 
 <form method="POST" action="{{url_for('diet', patient_id = patient_id)}}">
     <input type="hidden" name="patient_id" value="{{ patient_id }}">
-    <section class="meal">
-        <h3> Breakfast </h3>
-        {% for j in range(1,4)%}
-        <section class = "combinations">
-            <div class="combination">
-                <label for="meal"> Combination {{j}}</label>
-                <div class="inputs"> 
-                    {% for i in range(1,5)%} 
-                        <input type="text" name="breakfast_{{j}}[]" placeholder="Item {{i}}">    
-                    {% endfor %} 
-                </div>
-            </div>
-        </section>   
-        {% endfor %}
-    </section>
 
-    <section class="meal">
-        <h3> Lunch </h3>
-        {% for j in range(1,4)%}
-        <section class = "combinations">
-            <div class="combination">
-                <label for="meal"> Combination {{j}}</label>
-                <div class="inputs"> 
-                    {% for i in range(1,5)%} 
-                        <input type="text" name="lunch_{{j}}[]" placeholder="Item {{i}}">    
-                    {% endfor %} 
+    {% for meal in meals %}
+        <section class="meal">
+            <h3> {{meal.capitalize()}} </h3>
+            {% for j in range(1,4)%}
+            <section class = "combinations">
+                <div class="combination">
+                    <label for="meal"> Combination {{j}}</label>
+                    <div class="inputs"> 
+                        {% set meal_items = diet 
+                                | selectattr('meal_type', 'equalto', meal)
+                                | selectattr('option', 'equalto', j|string) 
+                                | map(attribute='item') 
+                                | list %}
+                        {% for i in range(1,5)%} 
+                        
+                            <input type="text" name="{{meal}}_{{j}}[]" placeholder="Item {{i}}" value="{{meal_items[i-1] if diet and i-1 < meal_items|length else ''}}">    
+                        {% endfor %} 
+                    </div>
                 </div>
-            </div>
-        </section>   
-        {% endfor %}
-    </section>
-
-    <section class="meal">
-        <h3> Dinner </h3>
-        {% for j in range(1,4)%}
-        <section class = "combinations">
-            <div class="combination">
-                <label for="meal"> Combination {{j}}</label>
-                <div class="inputs"> 
-                    {% for i in range(1,5)%} 
-                        <input type="text" name="dinner_{{j}}[]" placeholder="Item {{i}}">    
-                    {% endfor %} 
-                </div>
-            </div>
-        </section>   
-        {% endfor %}
-    </section>
-
-    <section class="meal">
-        <h3> Snacks </h3>
-        {% for j in range(1,4)%}
-        <section class = "combinations">
-            <div class="combination">
-                <label for="meal"> Combination {{j}}</label>
-                <div class="inputs"> 
-                    {% for i in range(1,5)%} 
-                        <input type="text" name="snacks_{{j}}[]" placeholder="Item {{i}}">    
-                    {% endfor %} 
-                </div>
-            </div>
-        </section>   
-        {% endfor %}
-    </section>
+            </section>   
+            {% endfor %}
+        </section>
+    {% endfor %}
 
     <button type="submit">Save Diet</button>
 </form>

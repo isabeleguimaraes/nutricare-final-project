@@ -49,6 +49,7 @@ sqlite3
 ## Future Improvements
 - Add Javascript to dynamically add items in diet creation
 - Use JSON for diet database
+- Implement Dates for each diet to see history
 
 ## TODO
 - Home Page (index)

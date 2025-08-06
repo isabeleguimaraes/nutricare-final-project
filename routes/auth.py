@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import UserMixin, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -95,7 +95,7 @@ def login():
             login_user(user)
             
             # Redirect logged in user to dashboard page
-            return redirect("/dashboard")
+            return redirect(url_for('dashboard'))
         else:
             # Error message in html
             error = "Invalid Username or Password."

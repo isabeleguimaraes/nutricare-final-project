@@ -75,7 +75,7 @@ def load_user(user_id):
         return User(*row)
     return None
 
-# Registrar blueprints das rotas
+# Register Route Blueprints
 app.register_blueprint(auth_bp)
 
 
@@ -92,14 +92,14 @@ def conditional_flags():
 # Home Page
 @app.route("/")
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     return render_template("index.html")
 
 # Dashboard Page
 @app.route("/dashboard", methods= ["GET", "POST"])
 @login_required
-def dashboard():
-
-    print("ROTA")
+def dashboard():  
 
     # Check if there are any linked patients. Their names: show in the sidebar. Their IDs: create a URL for each
     patients = check_patients(current_user.id)
@@ -176,7 +176,9 @@ def linking():
 @app.route("/diet", methods=['GET', 'POST'])
 def diet():
 
-    url_patient_id = request.args.get('patient_id')
+    url_patient_id = request.args.get('patient_id') 
+    diet = patient_diet(url_patient_id, current_user.id)
+    meals = ["breakfast", "lunch", "dinner", "snacks"]
 
     if request.method == 'POST':
         conn = sqlite3.connect('database/nutricare.db')
@@ -187,8 +189,7 @@ def diet():
         cursor.execute("SELECT id FROM diet WHERE nutri_id = ? and user_id = ?", (nutri_id, user_id))
         diet_id = cursor.fetchone()[0]
 
-        meals = ["breakfast", "lunch", "dinner", "snacks"]
-        
+        cursor.execute("DELETE FROM meals WHERE diet_id = ?", (diet_id,))
         for meal in meals:
             for option in range (1,4):
                 items = request.form.getlist(f'{meal}_{option}[]')
@@ -202,9 +203,9 @@ def diet():
                         
         conn.commit()
         conn.close()
-        return redirect(url_for('dashboard', patient_id=url_patient_id))
+        return redirect(url_for('dashboard', patient_id=url_patient_id,))
 
-    return render_template("diet.html", patient_id = url_patient_id)
+    return render_template("diet.html", patient_id = url_patient_id, diet = diet, meals=meals)
 
 
 

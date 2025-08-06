@@ -56,45 +56,48 @@
     </section>
 
 
-    <section class="data">
+    <section class="data">  
 
-        <div class="data-container">
             <h3> Diet </h3>
-            <div class="data-content">
+
+            {% if diet %}
+                <a href="{{url_for('diet', patient_id = request.args.get('patient_id'))}}">Edit Diet</a>
+            {% endif %}
+
             {% set meals = ['breakfast', 'lunch', 'dinner', 'snacks'] %}
-            {% for meal in meals %}
+            <div class="meals">
+                {% for meal in meals %}
 
-            <h3>{{meal.capitalize()}}</h3>
+                <div class="meal">
+                    <h3>{{meal.capitalize()}}</h3>
+
+                    <div class="combinations">
+                    {% for i in range(1,4) %}
+                        <div class="combination">
+                            <h3> Combination {{i}}</h3>
+
+                            <div class="items">
+                            {% for item in diet %}
+                                    {%if item.meal_type == meal and item.option == i|string %}
+                                        <p> {{ item.item }}</p>
+                                    {%endif%}
+                            {%endfor%}
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
             
-                {% for i in range(1,4) %}
-                    <h3> Combination {{i}}</h3>
-                    {% for item in diet %}
-                            {%if item.meal_type == meal and item.option == i|string %}
-                                <p> {{ item.item }}</p>
-                            {%endif%}
-                    {%endfor%}
-                {%endfor%}
+                    
+                
+                
             {%endfor%}
-                <!-- Else -->
-                 <a href="{{url_for('diet', patient_id = request.args.get('patient_id'))}}">Create Diet</a>
-            </div>
-        </div>
 
-        <div class="data-container">
-            <h3> Progress </h3>
-            <div class="data-content">
-                <p>content</p>
-            </div>
-        </div>
-
-        <div class="data-container">
-            <h3> Messages </h3>
-            <div class="data-content">
-                <p>content</p>
-            </div>
-        </div>
- 
-    </section>
-</section>
+                {%if not diet%}
+                    <a href="{{url_for('diet', patient_id = request.args.get('patient_id'))}}">Create Diet</a>
+                {% endif %}
+                
+      
 
 {% endblock %}
