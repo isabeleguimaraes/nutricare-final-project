@@ -1,52 +1,9 @@
 from routes.auth import auth_bp, User
 import sqlite3
-from helpers import check_requests, check_patients, update_request, patient_diet
+from helpers import check_requests, check_patients, update_request, patient_diet, check_nutri
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-
-#Create a connection with the database
-conn = sqlite3.connect('database/nutricare.db')
-
-#Create a cursor to navigate through the database
-cursor = conn.cursor()
-
-#Create a users table (to manage login and id)
-cursor.execute(""" CREATE TABLE IF NOT EXISTS users (
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
-               name TEXT,
-               email TEXT UNIQUE,
-               hash TEXT,  
-               role TEXT)
-""")
-
-#Create a diet table (to manage relationship between patient and nutritionist and requests)
-cursor.execute(""" CREATE TABLE IF NOT EXISTS diet (
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
-               user_id INTEGER,
-               nutri_id INTEGER,
-               status TEXT,
-               FOREIGN KEY (user_id) REFERENCES users(id),
-               FOREIGN KEY (nutri_id) REFERENCES users(id)
-               )
-               """)
-
-#Create a meals table (to manage patient's diet)
-cursor.execute(""" CREATE TABLE IF NOT EXISTS meals (
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
-               diet_id INTEGER,
-               meal_type TEXT,
-               option TEXT,
-               item TEXT,
-               FOREIGN KEY (diet_id) REFERENCES diet(id)
-               )
-               """)
-
-
-#Commiting the table creation
-conn.commit()
-#Closing the connection
-conn.close()
 
 # Configurinhg the app
 app = Flask(__name__)
@@ -101,20 +58,48 @@ def index():
 @login_required
 def dashboard():  
 
-    # Check if there are any linked patients. Their names: show in the sidebar. Their IDs: create a URL for each
-    patients = check_patients(current_user.id)
+    # Initializing Variables
+    requests = None
+    nutritionists = []
+    patients = []
+    diet = []
+
+    # Nutritionist Page
+    if current_user.role == 'nutritionist':
+        
+        # Check if there are any linked patients. Their names: show in the sidebar. Their IDs: create a URL for each
+        patients = check_patients(current_user.id)
+
+        # Redirect to First Patients Page
+        if patients and not request.args.get('patient_id'):
+            id = patients[0]['id']
+            return redirect(url_for('dashboard', patient_id = id, nutri_id = current_user.id, tab='diet'))
+        
+        
+        #Show Patients Diet
+        selected_tab = request.args.get('tab')
+        selected_patient_id = int(request.args.get('patient_id'))  
+        diet = patient_diet(selected_patient_id, current_user.id)
     
+    
+    # Patients Page
+
     # Check if there are any requests and return names
-    requests = check_requests(current_user.id)
-
-    # Redirect to First Patients Page
-    if current_user.role == 'nutritionist' and patients and not request.args.get('patient_id'):
-        id = patients[0]['id']
-        return redirect(url_for('dashboard', patient_id = id))
-
-    # Show patients diet
-    selected_patient_id = int(request.args.get('patient_id'))  
-    diet = patient_diet(selected_patient_id, current_user.id)
+    if current_user.role == 'patient':
+        
+        #Check any pending requests and associated nutritionists
+        requests = check_requests(current_user.id)
+        nutritionists = check_nutri(current_user.id)
+        
+    
+        # Show first Nutri Page 
+        if nutritionists and not request.args.get('nutri_id'):
+            id = nutritionists[0]['id']
+            return redirect(url_for('dashboard', patient_id = current_user.id, nutri_id = id, tab='diet'))
+        
+        selected_tab = request.args.get('tab')
+        selected_nutri_id = int(request.args.get('nutri_id'))
+        diet = patient_diet(current_user.id, selected_nutri_id)
 
     if request.method == "POST":
 
@@ -129,7 +114,7 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
-    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet)
+    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet, nutritionists = nutritionists, selected_tab = selected_tab)
     
 # Send Request Page
 @app.route("/linking", methods = ['GET', 'POST'])

@@ -1,13 +1,15 @@
+<!-- Using base.html layout-->
 {% extends "base.html" %}
-
+<!-- Page Title -->
 {% block title %} Register {% endblock %}
-
+<!-- Page Content -->
 {% block content %}
 
+<!--  -->
 <h2> Create a Diet </h2>
 <p> Create the combinations for each meal and let your patient know the quantity.</p>
 
-<form method="POST" action="{{url_for('diet', patient_id = patient_id)}}">
+<form method="POST" action="{{url_for('diet', patient_id = patient_id, nutri_id = nutri_id)}}">
     <input type="hidden" name="patient_id" value="{{ patient_id }}">
 
     {% for meal in meals %}

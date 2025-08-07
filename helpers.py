@@ -39,6 +39,26 @@ def check_patients(user_id):
         return [{"id": patient[0], "name": patient[1]} for patient in patients]
     else:
         return []
+    
+# Check Nutritionists Available
+def check_nutri(user_id):
+
+    # Open Connection
+    conn = sqlite3.connect('database/nutricare.db')
+    cursor = conn.cursor()
+
+    # Query for Nutritionists ID
+    cursor.execute("""SELECT users.id, users.name 
+                   FROM users 
+                   JOIN diet ON users.id = diet.nutri_id 
+                   WHERE diet.user_id = ? AND status = 'Accepted' """, 
+                   (user_id,))
+    nutritionists = cursor.fetchall()
+
+    if nutritionists:
+        return [{"id": nutri[0], "name": nutri[1]} for nutri in nutritionists]
+    else:
+        return []
 
 # Updating Request Status
 def update_request(action, user, nutri):
