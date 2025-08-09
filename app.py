@@ -1,11 +1,14 @@
 from routes.auth import auth_bp, User
-import sqlite3
-from helpers import check_requests, check_patients, update_request, patient_diet, check_nutri
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from routes.main import main_bp
+from routes.requests import requests_bp
+from routes.management import management_bp
 
-# Configurinhg the app
+import sqlite3
+from helpers import get_pending_requests, get_linked_patients, update_request_status, delete_request, get_patient_diet, get_linked_nutris, get_user_info_by_id
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager, login_required, current_user
+
+# Configuring the app
 app = Flask(__name__)
 app.secret_key = "TestPass"
 
@@ -16,24 +19,22 @@ login_manager.init_app(app)
 # If the user is not logged in, go to (route's function name):
 login_manager.login_view = "auth.login"
 
-# Retrieving user ID to start session
+# Retrieving user information and creating a 'User'.
 @login_manager.user_loader
 def load_user(user_id):
 
-    # Connecting to database
-    conn = sqlite3.connect('database/nutricare.db')
-    cursor = conn.cursor()
-    # Selecting user information based on ID
-    cursor.execute("SELECT id, name, email, hash, role FROM users where id = ?", (user_id,))
-    row = cursor.fetchone()
-    conn.close()
+    # Get User Information
+    info = get_user_info_by_id(user_id)
     # Return user information to log in user
-    if row:
-        return User(*row)
+    if info:
+        return User(*info)
     return None
 
 # Register Route Blueprints
 app.register_blueprint(auth_bp)
+app.register_blueprint(main_bp)
+app.register_blueprint(requests_bp)
+app.register_blueprint(management_bp)
 
 
 # Defining Conditional Variables to use in HTML (Log in Status)
@@ -43,158 +44,6 @@ def conditional_flags():
         'logged_in': current_user.is_authenticated,
         'user': current_user
     }
-
-# ROUTES #
-
-# Home Page
-@app.route("/")
-def index():
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
-    return render_template("index.html")
-
-# Dashboard Page
-@app.route("/dashboard", methods= ["GET", "POST"])
-@login_required
-def dashboard():  
-
-    # Initializing Variables
-    requests = None
-    nutritionists = []
-    patients = []
-    diet = []
-
-    # Nutritionist Page
-    if current_user.role == 'nutritionist':
-        
-        # Check if there are any linked patients. Their names: show in the sidebar. Their IDs: create a URL for each
-        patients = check_patients(current_user.id)
-
-        # Redirect to First Patients Page
-        if patients and not request.args.get('patient_id'):
-            id = patients[0]['id']
-            return redirect(url_for('dashboard', patient_id = id, nutri_id = current_user.id, tab='diet'))
-        
-        
-        #Show Patients Diet
-        selected_tab = request.args.get('tab')
-        selected_patient_id = int(request.args.get('patient_id'))  
-        diet = patient_diet(selected_patient_id, current_user.id)
-    
-    
-    # Patients Page
-
-    # Check if there are any requests and return names
-    if current_user.role == 'patient':
-        
-        #Check any pending requests and associated nutritionists
-        requests = check_requests(current_user.id)
-        nutritionists = check_nutri(current_user.id)
-        
-    
-        # Show first Nutri Page 
-        if nutritionists and not request.args.get('nutri_id'):
-            id = nutritionists[0]['id']
-            return redirect(url_for('dashboard', patient_id = current_user.id, nutri_id = id, tab='diet'))
-        
-        selected_tab = request.args.get('tab')
-        selected_nutri_id = int(request.args.get('nutri_id'))
-        diet = patient_diet(current_user.id, selected_nutri_id)
-
-    if request.method == "POST":
-
-        # Handling User's answer to nutritionist request
-        # Save Data from Form
-        action = request.form.get("action")
-        nutri_id = request.form.get("nutri_id")
-        user_id = current_user.id
-
-        # Update Request Status
-        update_request(action, user_id, nutri_id)
-
-        return redirect(url_for('dashboard'))
-
-    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet, nutritionists = nutritionists, selected_tab = selected_tab)
-    
-# Send Request Page
-@app.route("/linking", methods = ['GET', 'POST'])
-def linking():
-    
-    message = ''
-    msg_type = ''
-
-    if request.method == "POST":
-        email = request.form.get("email")
-
-        conn = sqlite3.connect("database/nutricare.db")
-        cursor = conn.cursor()
-
-        # Identifies user ID based on typed email
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
-        result = cursor.fetchone()
-
-        # Error message variables to use in HTML
-        if result is None:
-            message = "This user doesn't exist."
-            msg_type = "error"
-        
-        else:
-            # Define user ID
-            id = result[0]
-            cursor.execute("SELECT user_id FROM diet WHERE user_id = ?", (id,))
-            
-            # Check if the request has already been sent (Status pending or accepted)
-            id_check = cursor.fetchone()
-            if id_check:
-                message = "You already sent a request to this user"
-            
-            # If not, add relationship between nutritionist and patient, with pending status.
-            else:
-                cursor.execute("INSERT INTO diet (user_id, nutri_id, status) VALUES (?, ?, ?)", (id, current_user.id, "Pending"))
-                message = "The request was successfully sent to the user."
-                msg_type = "success"
-                conn.commit()
-        conn.close()
-
-    return render_template("linking.html", message = message, msg_type = msg_type)
-
-@app.route("/diet", methods=['GET', 'POST'])
-def diet():
-
-    url_patient_id = request.args.get('patient_id') 
-    diet = patient_diet(url_patient_id, current_user.id)
-    meals = ["breakfast", "lunch", "dinner", "snacks"]
-
-    if request.method == 'POST':
-        conn = sqlite3.connect('database/nutricare.db')
-        cursor = conn.cursor()
-        nutri_id = current_user.id
-        user_id = request.form.get('patient_id')
-
-        cursor.execute("SELECT id FROM diet WHERE nutri_id = ? and user_id = ?", (nutri_id, user_id))
-        diet_id = cursor.fetchone()[0]
-
-        cursor.execute("DELETE FROM meals WHERE diet_id = ?", (diet_id,))
-        for meal in meals:
-            for option in range (1,4):
-                items = request.form.getlist(f'{meal}_{option}[]')
-                for item in items:
-                    if item.strip():
-                        cursor.execute("""
-                            INSERT INTO meals (diet_id, meal_type, option, item) 
-                            VALUES (?, ?, ?, ?)  
-                            """,
-                            (diet_id, meal, option, item))
-                        
-        conn.commit()
-        conn.close()
-        return redirect(url_for('dashboard', patient_id=url_patient_id,))
-
-    return render_template("diet.html", patient_id = url_patient_id, diet = diet, meals=meals)
-
-
-
-
 
 # Run App
 if __name__ == "__main__":

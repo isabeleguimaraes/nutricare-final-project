@@ -22,7 +22,7 @@
                     <div class="inputs"> 
                         {% set meal_items = diet 
                                 | selectattr('meal_type', 'equalto', meal)
-                                | selectattr('option', 'equalto', j|string) 
+                                | selectattr('combination', 'equalto', j|string) 
                                 | map(attribute='item') 
                                 | list %}
                         {% for i in range(1,5)%} 

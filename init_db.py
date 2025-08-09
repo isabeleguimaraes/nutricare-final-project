@@ -15,25 +15,25 @@ cursor.execute(""" CREATE TABLE IF NOT EXISTS users (
                role TEXT)
 """)
 
-#Create a diet table (to manage relationship between patient and nutritionist and requests)
-cursor.execute(""" CREATE TABLE IF NOT EXISTS diet (
+#Create a patient_nutri_link table (to manage relationship between patient and nutritionist and requests)
+cursor.execute(""" CREATE TABLE IF NOT EXISTS patient_nutri_link (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
-               user_id INTEGER,
+               patient_id INTEGER,
                nutri_id INTEGER,
                status TEXT,
-               FOREIGN KEY (user_id) REFERENCES users(id),
+               FOREIGN KEY (patient_id) REFERENCES users(id),
                FOREIGN KEY (nutri_id) REFERENCES users(id)
                )
                """)
 
 #Create a meals table (to manage patient's diet)
-cursor.execute(""" CREATE TABLE IF NOT EXISTS meals (
+cursor.execute(""" CREATE TABLE IF NOT EXISTS diet (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
-               diet_id INTEGER,
+               link_id INTEGER,
                meal_type TEXT,
-               option TEXT,
+               combination TEXT,
                item TEXT,
-               FOREIGN KEY (diet_id) REFERENCES diet(id)
+               FOREIGN KEY (link_id) REFERENCES patient_nutri_link(id)
                )
                """)
 

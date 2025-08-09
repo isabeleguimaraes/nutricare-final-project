@@ -10,7 +10,7 @@
     <p> Send a request to a patient to access their diet, progress and send messages.</p>
 </div>
 
-<form action="{{url_for('linking')}}" method="POST">
+<form action="{{url_for('requests.send_request')}}" method="POST">
     <input type="text" name="email" placeholder="Patient's email">
     <button class="btn-primary" type="submit"> Send Request</button>
     <p class="{{ msg_type }}"> {{ message }} </p>
@@ -18,7 +18,7 @@
 
 
 
-<a class="btn-link" href="{{url_for('dashboard')}}"> <i class="fa-solid fa-arrow-left"></i> Return to Dashboard</a>
+<a class="btn-link" href="{{url_for('main.dashboard')}}"> <i class="fa-solid fa-arrow-left"></i> Return to Dashboard</a>
 </section>
 
 

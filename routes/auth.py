@@ -14,7 +14,9 @@ class User(UserMixin):
         self.hash = hash
         self.role = role
 
-
+# Constants
+MIN_PASSWORD_LENGTH = 6
+MIN_EMAIL_LENGTH = 4
 
 # Registration Page
 @auth_bp.route("/register", methods=['GET', 'POST'])
@@ -32,10 +34,10 @@ def register():
         role = request.form.get('role')
       
         # Error Checking
-        if len(email) < 4:
+        if len(email) < MIN_EMAIL_LENGTH:
             errors.append("Email must be at least 4 characters.")
 
-        if len(password) < 6:
+        if len(password) < MIN_PASSWORD_LENGTH:
             errors.append ("Password must be at least 6 characters.")
 
         if password != confirmation:
@@ -65,7 +67,7 @@ def register():
 
             # Log In after successful registration and redirect to dashboard
             login_user(user)
-            return redirect("/dashboard")
+            return redirect("/main.dashboard")
 
     return render_template("register.html", errors=errors)
 
@@ -95,7 +97,7 @@ def login():
             login_user(user)
             
             # Redirect logged in user to dashboard page
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
         else:
             # Error message in html
             error = "Invalid Username or Password."
