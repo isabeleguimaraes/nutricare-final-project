@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user
-from helpers import update_request_status, delete_request
+from repository.helpers import update_request_status, delete_request, get_user_info_by_email, check_if_patient_is_linked, insert_pending_request
 
 requests_bp = Blueprint('requests', __name__)
 
@@ -34,36 +34,31 @@ def send_request():
     msg_type = ''
 
     if request.method == "POST":
-        email = request.form.get("email")
 
-        conn = sqlite3.connect("database/nutricare.db")
-        cursor = conn.cursor()
+        patient_email = request.form.get("email")
+        nutri_id = current_user.id
 
         # Identifies user ID based on typed email
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
-        result = cursor.fetchone()
+        user_data = get_user_info_by_email(patient_email)
 
         # Error message variables to use in HTML
-        if result is None:
+        if user_data is None:
             message = "This user doesn't exist."
             msg_type = "error"
         
         else:
-            # Define user ID
-            id = result[0]
-            cursor.execute("SELECT patient_id FROM patient_nutri_link WHERE patient_id = ?", (id,))
-            
             # Check if the request has already been sent (Status pending or accepted)
-            id_check = cursor.fetchone()
-            if id_check:
+            patient_data = check_if_patient_is_linked(nutri_id, patient_email)
+            
+            if patient_data:
                 message = "You already sent a request to this user"
             
             # If not, add relationship between nutritionist and patient, with pending status.
             else:
-                cursor.execute("INSERT INTO patient_nutri_link (patient_id, nutri_id, status) VALUES (?, ?, ?)", (id, current_user.id, "Pending"))
+                
+                insert_pending_request(patient_data["id"], nutri_id, "Pending")
                 message = "The request was successfully sent to the user."
                 msg_type = "success"
-                conn.commit()
-        conn.close()
+               
 
     return render_template("linking.html", message = message, msg_type = msg_type)

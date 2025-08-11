@@ -2,9 +2,12 @@ import sqlite3
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import UserMixin, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from repository.helpers import save_users_data, get_user_info_by_email
 
 auth_bp = Blueprint('auth', __name__)
 
+
+    
 # Defining a user: a function that will store the user's data and can be accessed as an object.
 class User(UserMixin):
     def __init__(self, id, name, email, hash, role):
@@ -51,19 +54,18 @@ def register():
             # Generate a hash for the password
             hash = generate_password_hash(password)
 
-            # Save users information in users table
-            conn = sqlite3.connect('database/nutricare.db')
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (name, email, hash, role) VALUES (?,?,?,?)", (name, email, hash, role))
-            conn.commit()
+            save_users_data(name, email, hash, role)
 
             # Retrieve users data, including user ID
-            cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-            user_data = cursor.fetchone()
-            conn.close()
-
+            user_data = get_user_info_by_email(email)
             # Define Main User based on saved data
-            user = User(*user_data)
+            user = User(
+                    id=user_data["id"], 
+                    name=user_data["name"],
+                    email=user_data["email"],
+                    hash=user_data["hash"],
+                    role=user_data["role"]
+                    )
 
             # Log In after successful registration and redirect to dashboard
             login_user(user)
@@ -79,19 +81,15 @@ def login():
     error = None
 
     if request.method == "POST":
+        
         email = request.form.get("email")
         password = request.form.get("password")
         
-        conn = sqlite3.connect('database/nutricare.db')
-        cursor = conn.cursor()
-
         # Retrieve the user information based on email
-        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-        user_data = cursor.fetchone()
-        conn.close()
-
+        user_data = get_user_info_by_email(email)
+        
         # Verify if user exists and password matches
-        if user_data and check_password_hash(user_data[3], password):
+        if user_data and check_password_hash(user_data["hash"], password):
             # If everything correct, associate this user with the user in session and log them in
             user = User(*user_data)
             login_user(user)

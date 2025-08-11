@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user, login_required
-from helpers import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet
+from repository.helpers import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet
 
 main_bp = Blueprint('main', __name__)
 
