@@ -1,12 +1,18 @@
+import sqlite3
+
+# Importing Blueprints
 from routes.auth import auth_bp, User
 from routes.main import main_bp
 from routes.requests import requests_bp
 from routes.management import management_bp
 
-import sqlite3
-from repository.helpers import get_pending_requests, get_linked_patients, update_request_status, delete_request, get_patient_diet, get_linked_nutris, get_user_info_by_id
-from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_required, current_user
+# Importing Flask
+from flask import Flask
+from flask_login import LoginManager, current_user
+
+# Importing Repository Functions
+from repository import get_user_info_by_id
+
 
 # Configuring the app
 app = Flask(__name__)

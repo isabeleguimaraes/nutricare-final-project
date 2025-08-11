@@ -1,13 +1,12 @@
-import sqlite3
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import UserMixin, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from repository.helpers import save_users_data, get_user_info_by_email
+
+from repository import save_users_data, get_user_info_by_email
 
 auth_bp = Blueprint('auth', __name__)
 
-
-    
+   
 # Defining a user: a function that will store the user's data and can be accessed as an object.
 class User(UserMixin):
     def __init__(self, id, name, email, hash, role):
@@ -69,7 +68,7 @@ def register():
 
             # Log In after successful registration and redirect to dashboard
             login_user(user)
-            return redirect("/main.dashboard")
+            return redirect("main.dashboard")
 
     return render_template("register.html", errors=errors)
 
@@ -91,7 +90,13 @@ def login():
         # Verify if user exists and password matches
         if user_data and check_password_hash(user_data["hash"], password):
             # If everything correct, associate this user with the user in session and log them in
-            user = User(*user_data)
+            user = User(
+                    id=user_data["id"], 
+                    name=user_data["name"],
+                    email=user_data["email"],
+                    hash=user_data["hash"],
+                    role=user_data["role"]
+                    )
             login_user(user)
             
             # Redirect logged in user to dashboard page

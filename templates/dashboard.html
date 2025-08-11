@@ -127,6 +127,7 @@
     
         <!-- Content Section -->
         <section class="diet-content">
+        {% if diet %}
 
             <!-- A div for each Meal Type -->
             {% for meal in meals %}
@@ -157,6 +158,9 @@
                     </div>   
                 </div>
             {%endfor%}
+        {% else %}
+                <p> A diet hasn't been created yet.</p>
+        {% endif %}
         </section>
     {% endif %}
 

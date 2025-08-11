@@ -1,7 +1,8 @@
 import sqlite3
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user
-from repository.helpers import update_request_status, delete_request, get_user_info_by_email, check_if_patient_is_linked, insert_pending_request
+
+from repository import update_request_status, delete_request, get_user_info_by_email, check_if_patient_is_linked, insert_pending_request
 
 requests_bp = Blueprint('requests', __name__)
 
@@ -39,23 +40,23 @@ def send_request():
         nutri_id = current_user.id
 
         # Identifies user ID based on typed email
-        user_data = get_user_info_by_email(patient_email)
+        patient_data = get_user_info_by_email(patient_email)
 
         # Error message variables to use in HTML
-        if user_data is None:
+        if patient_data is None:
             message = "This user doesn't exist."
             msg_type = "error"
         
         else:
             # Check if the request has already been sent (Status pending or accepted)
-            patient_data = check_if_patient_is_linked(nutri_id, patient_email)
+            already_linked = check_if_patient_is_linked(nutri_id, patient_email)
             
-            if patient_data:
+            if already_linked:
                 message = "You already sent a request to this user"
             
             # If not, add relationship between nutritionist and patient, with pending status.
             else:
-                
+
                 insert_pending_request(patient_data["id"], nutri_id, "Pending")
                 message = "The request was successfully sent to the user."
                 msg_type = "success"

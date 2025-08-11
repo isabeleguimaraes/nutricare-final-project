@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user, login_required
-from repository.helpers import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet
+
+from repository import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet
 
 main_bp = Blueprint('main', __name__)
 
@@ -9,7 +10,8 @@ main_bp = Blueprint('main', __name__)
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
-    return render_template("index.html")
+    else:
+        return redirect(url_for('auth.login'))
 
 
 # Dashboard Page
@@ -40,11 +42,14 @@ def dashboard():
 
         # If there are any associated patients, show their Diet
         if patients:
-            try:
-                selected_patient_id = int(request.args.get('patient_id'))
-            except (ValueError, TypeError):
-                selected_patient_id = None
-            diet = get_patient_diet(selected_patient_id, current_user.id)
+
+                try:
+                    selected_patient_id = int(request.args.get('patient_id'))
+                except (ValueError, TypeError):
+                    selected_patient_id = None
+                diet = get_patient_diet(selected_patient_id, current_user.id)
+           
+
         
       
     # Patients Page
@@ -67,7 +72,7 @@ def dashboard():
         if nutritionists:
             try:
                 selected_nutri_id = int(request.args.get('nutri_id'))
-            except (ValueError, Typeerror):
+            except (ValueError, TypeError):
                 selected_nutri_id = None
             diet = get_patient_diet(current_user.id, selected_nutri_id)
 

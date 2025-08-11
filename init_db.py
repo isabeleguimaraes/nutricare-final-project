@@ -37,6 +37,9 @@ cursor.execute(""" CREATE TABLE IF NOT EXISTS diet (
                )
                """)
 
+# Create progress Table to log and track patient's progress
+
+
 
 #Commiting the table creation
 conn.commit()
