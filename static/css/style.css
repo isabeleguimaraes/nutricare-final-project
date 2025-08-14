@@ -1,0 +1,110 @@
+/* General Settings */
+
+:root{
+  --primary-color: #ececec;
+  --green: #0e923a;
+}
+
+body{
+  
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:  5rem;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Buttons */
+
+.btn-primary {
+  background-color: var(--green);
+  color: var(--primary-color);
+  padding: 0.8rem 0.8rem;
+  border-radius: 8px; 
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  min-width: 8rem;
+  text-align: center;
+  box-sizing: border-box;
+  width: 10rem;
+}
+
+.btn-secondary {
+  border: 2px solid gray;
+  padding: 0.8rem;
+  text-decoration: none;
+  border-radius: 8px;
+  color: black;
+  width: 100px;
+
+}
+.btn-link {
+  color: black;
+  border-radius: 8px; 
+  font-weight: 400;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-link:hover{
+  color: var(--green);
+}
+
+/* Typography */
+
+body {
+    font-family: "Montserrat";
+    font-size: 16px
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+p {
+    border: 0;
+    margin: 0;
+}
+
+.link {
+    text-decoration: underline;
+    color: black;
+}
+
+.text-fade {
+    color: rgb(114, 114, 114);
+}
+
+
+/* Main Content Container */
+
+.container {
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 4rem;
+}

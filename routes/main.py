@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user, login_required
 
-from repository import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet
+from repository import get_linked_nutris, get_linked_patients, get_pending_requests, get_patient_diet, get_user_info_by_id
 
 main_bp = Blueprint('main', __name__)
 
@@ -24,6 +24,7 @@ def dashboard():
     nutritionists = []
     patients = []
     diet = []
+    name = None
 
     # Nutritionist Page
     if current_user.role == 'nutritionist':
@@ -34,11 +35,9 @@ def dashboard():
         # Redirect to First Patients Page
         if patients and not request.args.get('patient_id'):
             id = patients[0]['id']
-            return redirect(url_for('main.dashboard', patient_id = id, nutri_id = current_user.id, tab='diet'))
+            return redirect(url_for('main.dashboard', patient_id = id, nutri_id = current_user.id))
         
-        
-        #Show specific tab
-        selected_tab = request.args.get('tab')
+    
 
         # If there are any associated patients, show their Diet
         if patients:
@@ -48,7 +47,9 @@ def dashboard():
                 except (ValueError, TypeError):
                     selected_patient_id = None
                 diet = get_patient_diet(selected_patient_id, current_user.id)
-           
+                name = get_user_info_by_id(selected_patient_id)[1]
+        
+        
 
         
       
@@ -65,9 +66,8 @@ def dashboard():
         # Show first Nutri Page 
         if nutritionists and not request.args.get('nutri_id'):
             id = nutritionists[0]['id']
-            return redirect(url_for('main.dashboard', patient_id = current_user.id, nutri_id = id, tab='diet'))
+            return redirect(url_for('main.dashboard', patient_id = current_user.id, nutri_id = id))
         
-        selected_tab = request.args.get('tab')
 
         if nutritionists:
             try:
@@ -75,5 +75,7 @@ def dashboard():
             except (ValueError, TypeError):
                 selected_nutri_id = None
             diet = get_patient_diet(current_user.id, selected_nutri_id)
+            name = get_user_info_by_id(selected_nutri_id)[1]
+           
 
-    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet, nutritionists = nutritionists, selected_tab = selected_tab)
+    return render_template("dashboard.html", patients = patients, requests = requests, diet = diet, nutritionists = nutritionists, name = name)

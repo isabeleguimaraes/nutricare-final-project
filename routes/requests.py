@@ -2,7 +2,7 @@ import sqlite3
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import current_user
 
-from repository import update_request_status, delete_request, get_user_info_by_email, check_if_patient_is_linked, insert_pending_request
+from repository import update_request_status, delete_request, get_user_info_by_email, check_if_patient_is_linked, insert_pending_request, delete_patient
 
 requests_bp = Blueprint('requests', __name__)
 
@@ -62,4 +62,14 @@ def send_request():
                 msg_type = "success"
                
 
-    return render_template("linking.html", message = message, msg_type = msg_type)
+    return render_template("send_request.html", message = message, msg_type = msg_type)
+
+@requests_bp.route("/remove_patient", methods = ['POST'])
+def remove_patient():
+    
+    if current_user.role == 'nutritionist':
+        # Delete Patient
+        removed_patient = request.form.get("removed_patient")
+
+        delete_patient(current_user.id, removed_patient)
+    return redirect(url_for('main.dashboard'))

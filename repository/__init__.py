@@ -1,4 +1,4 @@
 from .manage_diet import delete_current_diet, get_patient_diet, delete_current_diet, save_new_diet
-from .patient_nutri_link import get_linked_nutris, get_linked_patients, check_if_patient_is_linked, find_link_id
+from .patient_nutri_link import get_linked_nutris, get_linked_patients, check_if_patient_is_linked, find_link_id, delete_patient
 from .patient_nutri_requests import insert_pending_request, get_pending_requests, delete_request, update_request_status
 from .users import save_users_data, get_user_info_by_email, get_user_info_by_id

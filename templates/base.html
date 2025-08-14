@@ -10,8 +10,11 @@
         <title> {% block title %} NutriCare {% endblock%} </title>
 
         <!-- CSS Style -->
-        <link rel="stylesheet" href= "{{ url_for('static', filename='style.css') }}"/>
-        <link rel="stylesheet" href= "{{ url_for('static', filename='extra.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='css/style.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='css/login.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='css/send_request.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='css/diet.css') }}"/>
+        <link rel="stylesheet" href= "{{ url_for('static', filename='css/dashboard.css') }}"/>
 
         <!--Icons-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -27,27 +30,13 @@
     </head>
 
     <body>
-         <!-- Navigation Bar -->
-        <nav>
-            <!-- Navigation Login -->
-            <div class="nav-login">
-                {% if logged_in %}
-                    <a href="{{url_for('auth.logout')}}" class="btn-primary">Log out</a>
-                {% else %}
-                    <a href="{{url_for('auth.login')}}" class="btn-primary">Log in</a>
-                    <a href="{{url_for('auth.register')}}" class="btn-link"> Sign Up</a>
-                {% endif %}
-            </div>
-            <!-- Right Space Empty Element -->
-            <div>
-            </div> 
-        </nav>
+    
 
-        <main class="container">
+        
             {% block content %}
             
             {% endblock %}
-        </main>
+        
 
         
     </body>

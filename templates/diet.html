@@ -5,18 +5,19 @@
 <!-- Page Content -->
 {% block content %}
 
-<!--  -->
+<section class="creating-diet">
 <h2> Create a Diet </h2>
 <p> Create the combinations for each meal and let your patient know the quantity.</p>
 
-<form method="POST" action="{{url_for('diet', patient_id = patient_id, nutri_id = nutri_id)}}">
+<form method="POST" action="{{url_for('management.manage_diet', patient_id = patient_id, nutri_id = nutri_id)}}">
     <input type="hidden" name="patient_id" value="{{ patient_id }}">
-
+    <section class="test">
     {% for meal in meals %}
         <section class="meal">
             <h3> {{meal.capitalize()}} </h3>
-            {% for j in range(1,4)%}
             <section class = "combinations">
+            {% for j in range(1,4)%}
+            
                 <div class="combination">
                     <label for="meal"> Combination {{j}}</label>
                     <div class="inputs"> 
@@ -31,12 +32,14 @@
                         {% endfor %} 
                     </div>
                 </div>
-            </section>   
             {% endfor %}
-        </section>
+            </section> 
+        </section> 
     {% endfor %}
-
-    <button type="submit">Save Diet</button>
+    </section>
+           
+    <button class="btn-primary" type="submit">Save Diet</button>
 </form>
+</section>
 
 {% endblock %}

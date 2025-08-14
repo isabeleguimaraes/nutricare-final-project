@@ -4,42 +4,70 @@
 
 {% block content %}
 
-<section class="form-section">
+<div class="login-container">
 
-    <h2> Sign Up to NutriCare </h2>
-    <form class = "form-container" action="{{url_for('auth.register')}}" method="POST">
-
-        <div class="input-container">
-            <input class=" "name="name" type="text" placeholder="Full Name">
-            <input class=" "name="email" type="text" placeholder="Your Email">
-            <input class="" name="password" type="password" placeholder="Password">
-            <input class="" name="confirmation" type="password" placeholder="Confirm Password">
-            
-        </div>
-
+    <section class="register-intro">
         
-        <div class="radio-container">
-            <label>
-                <input type="radio" name="role" value="patient">
-                I'm a Patient
-            </label>
-            <label>
-                <input type="radio" name="role" value="nutritionist">
-                I'm a Nutritionist
-            </label>
+        <div class="welcome">
+            <h2> Welcome! </h2>
+            <div class="register_now">
+                <p class="text-fade"> Already have an account? </p>
+                <a href= "{{url_for('auth.login')}}" class="link"> Sign In </a>
+            </div>
         </div>
+            
+        <h1> Sign Up </h1>
 
-        <div class="error-container">
+        <form action="{{url_for('auth.register')}}" method="POST">
+
+            <div class = "form-item">  
+                <label for="name"> Full Name </label>
+                <input name="name" type="text" placeholder="Full Name">    
+            </div>
+
+            <div class = "form-item">
+                <label for="email"> Email Address </label>
+                <input name="email" type="text" placeholder="Your Email">    
+            </div>
+
+            <div class = "form-item">
+                <label for="password"> Password </label>
+                <input name="password" type="password" placeholder="Your Password">    
+            </div>
+
+            <div class = "form-item">
+                <label for="password"> Confirm Password </label>
+                <input name="confirmation" type="password" placeholder="Confirm Password">    
+            </div>
+
+            <div class="radio-container">
+                <label>
+                    <input type="radio" name="role" value="patient">
+                    I'm a Patient
+                </label>
+                <label>
+                    <input type="radio" name="role" value="nutritionist">
+                    I'm a Nutritionist
+                </label>
+            </div>
+
+            <div class="error-container">
             {% if errors %}
                 {% for error in errors %}
                     <p class="error"> {{error}} </p>
                 {% endfor %}
-        {% endif %}
-        </div>
+            {% endif %}
+            </div>
         
-        <button type="submit" class="btn-primary">Sign Up</button>
-    </form>
+            <button type="submit" class="btn-primary">Sign Up</button>
+            
+        </form>
+    </section>
 
-</section>
+    <section class="login-image">
+        <img src="{{url_for('static', filename='images/logo.png')}}" alt="logo">
+        <p> Join our platform to connect with your nutritionist and access personalized nutrition plans. </p>
+    </section>
+</div>
 
 {% endblock %}

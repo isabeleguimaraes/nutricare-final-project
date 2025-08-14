@@ -1,167 +1,168 @@
-<!-- Using base.html layout-->
 {% extends "base.html" %}
-<!-- Page Title -->
+
 {% block title %} Register {% endblock %}
-<!-- Page Content -->
+
 {% block content %}
 
 <!-- Variables -->
- {%set p_id = request.args.get('patient_id') %}
- {% set n_id = request.args.get('nutri_id') %}
- {% set meals = ['breakfast', 'lunch', 'dinner', 'snacks'] %}
+{%set p_id = request.args.get('patient_id') %}
+{% set n_id = request.args.get('nutri_id') %}
+{% set meals = ['breakfast', 'lunch', 'dinner', 'snacks'] %}
+<div class="logout">
+    <form action="{{url_for('auth.logout')}}" method="POST">
+        <button type="submit"> Log Out </button>
+    </form>
+</div>
+<section class="container-dash">
 
-<!-- SIDE MENU -->
+    <h2 class="page-title"> Dashboard </h2>
 
-<!-- Nutritionist Side Menu-->
-{% if user.role == 'nutritionist'%}
+    <!---------- NUTRITIONIST VIEW ----------->
+    {% if user.role == 'nutritionist'%}
 
-    <div class="side-menu">
-        <h3> Your Patients </h3> <!-- Menu Title -->
-
-        <!-- Display Patients Names -->
-        {% if patients %}
-            <ul>
-            {% for patient in patients %}
-                <li> <a href="{{url_for('main.dashboard', patient_id = patient.id, nutri_id = current_user.id )}}"> {{ patient.name }} </a> </li>
+        <!----- Side Menu ----->
+        <aside class="side-menu">
+            <h3 class="h4"> Your Patients </h3>
+            <p> Select a patient to view their diet or add a new one. </p>
+            <a class="btn-primary btn-menu" href="{{url_for('requests.send_request')}}"> Add a Patient </a> <!-- 'Add Patient' Button -->    
+            
+            <!-- Display Patients Names -->
+            {% if patients %}
+            <ul>    
+                {% for patient in patients %}
                 <li> 
-                    <form method="POST" action="{{ url_for('main.dashboard', patient_id = p_id, nutri_id = n_id, tab = selected_tab)}}"> 
-                        <input name="remove_patient" type="hidden" value="{{ patient.id }}">
-                        <button type="submit"> Remove </button>
+                    <a id="patient-name" href="{{url_for('main.dashboard', patient_id = patient.id, nutri_id = current_user.id )}}"> {{ patient.name }} </a> 
+                </li>
+                <li> 
+                    <form class="remove-button" method="POST" action="{{ url_for('requests.remove_patient', patient_id = p_id, nutri_id = n_id)}}"> 
+                        <input name="removed_patient" type="hidden" value="{{ patient.id }}">
+                        <button  type="submit"> <i class="fa-solid fa-trash-can" style="color: #ffffff;"></i> </button>
                     </form>
                 </li>
             {% endfor %}
             </ul>
-        <!-- If there are no patients -->
-        {% else %}
-            <p class="blank"> You don't have any associated patients. </p>
-        {% endif %}
-    </div>
+            <!-- If there are no patients -->
+                
+            {% endif %}
+        </aside>
 
-{% endif %}
+        <!----- Add Patients ----->
+        <div class="intro-dash">
+            <p> 
+                This is where you can see, edit, create and share your patients' diet. 
+                To start creating a diet, simply add a patient first. 
+            </p>   
+        </div>
+    {% endif %}
 
-<!-- Patient Side Menu-->
-{% if user.role == 'patient'%}
+    <!---------- PATIENT VIEW ----------->
+    {%if current_user.role == 'patient'%}
 
-    <div class="side-menu">
-        <!-- Display Nutritionists Names -->
-        <h3> Your Nutritionists </h3>
-        {% if nutritionists %}
-            <ul>
-            {% for nutri in nutritionists %}
-                <li> <a href="{{url_for('main.dashboard', patient_id = current_user.id, nutri_id = nutri.id)}}"> {{ nutri.name }} </a> </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-        <p class="blank"> You don't have any associated nutritionists. </p>
-        {% endif %}
-    </div>
-
-{% endif %}
-
-
-<!-- REQUESTS -->
-
-{%if current_user.role == 'patient'%}
-
-    <h3> Requests </h3>
-        <div class="top-options">
-            {% if requests %}
-            <!-- Create a form for each request -->
-                {% for request in requests %} 
-                    <p> {{ request.name }} </p>
-                    <form class="request" action="{{url_for('requests.respond_request')}}" method="POST">
-                        <input type="hidden" name="nutri_id" value="{{request.id}}">
-                        <button type="submit" name="action" value="accept"> Accept </button>
-                        <button type="submit" name="action" value="reject"> Reject </button>
-                    </form>
-                {%endfor%}
+        <!----- Side Menu ----->
+        <aside class="side-menu">
+            <!-- Display Nutritionists Names -->
+            <h3> Your Nutritionists </h3>
+            {% if nutritionists %}
+                <ul>
+                    {% for nutri in nutritionists %}
+                        <li> 
+                            <a href="{{url_for('main.dashboard', patient_id = current_user.id, nutri_id = nutri.id)}}"> 
+                                {{ nutri.name }} 
+                            </a> 
+                        </li>
+                    {% endfor %}
+                </ul>
             {% else %}
-                <p> You don't have any requests </p>
-            {%endif%}
+                <p class="blank"> You don't have any associated nutritionists. </p>
+            {% endif %}
+        </aside>
 
+    
+    <!----- Requests ----->
+    <section class="top-options">
+        <h3> Requests </h3>
+        {% if requests %}
+            <!-- Create a form for each request -->
+            {% for request in requests %} 
+                <p> {{ request.name }} </p>
+                <form class="request" action="{{url_for('requests.respond_request')}}" method="POST">
+                    <input type="hidden" name="nutri_id" value="{{request.id}}">
+                    <button type="submit" name="action" value="accept"> Accept </button>
+                    <button type="submit" name="action" value="reject"> Reject </button>
+                </form>
+            {%endfor%}
+        {% else %}
+            <p> You don't have any pending requests. </p>
+        {%endif%}
+    </section>     
 {%endif%}
 
 
-
-<!-- Main Content -->
-
-<!-- Page Title -->
-<h2> Dashboard </h2>
-
-{% if patients or nutritionists %}
-    <!-- Tabs -->
-    <div class="tabs">
-        <ul>
-            <li> <a href="{{url_for('main.dashboard', patient_id = p_id, nutri_id = n_id, tab='diet')}}"> Diet </a> </li>
-            <li> <a href="{{url_for('main.dashboard', patient_id = p_id, nutri_id = n_id, tab='progress')}}"> Progress </a> </li>
-            <li> <a href="{{url_for('main.dashboard', patient_id = p_id, nutri_id = n_id, tab='messages')}}"> Messages </a> </li>
-        </ul>
-    </div>
-{% else %}
-    {% if current_user.role == 'nutritionist'%}
-        <p> Add patients to create and share their diet, track their progress and message them. </p>
-        <a href="{{url_for('requests.send_request')}}"> Add a Patient </a> <!-- 'Add Patient' Button -->
-    {% elif current_user.role == 'patient'%}
-        <p> Ask your nutritionist to add you through your email to begin managing your diet, tracking progress and messaging each other. </p>
-    {% endif %}
-{% endif %}
-
-    <!-- Diet Tab -->
-    {% if selected_tab == 'diet'%}
-
-        <!-- Title Section -->
-        <section class="diet-title">
-
-            <!-- Diet Title -->
-            <h3> Diet </h3>
-            
-            {% if current_user.role == 'nutritionist'%}
-            <!-- Create/Edit Diet -->
+    <!----- DIET SECTION ------>
+    <section class="diet-title">
+        {% if current_user.role == 'nutritionist'%}
+            {% if patients %}
                 {% if diet %}
-                    <a href="{{url_for('management.manage_diet', patient_id = request.args.get('patient_id'))}}"> Edit Diet </a>
-                {% else %}                 
-                    <a href="{{url_for('management.manage_diet', patient_id = request.args.get('patient_id'))}}"> Create Diet </a>     
-                {% endif %}
-            {% endif %}
-        </section>
-    
-        <!-- Content Section -->
-        <section class="diet-content">
+                    <h3> {{name}}'s Diet </h3> 
+                {% else %}  
+                    <div class="create-diet">
+                        <p> A diet hasn't been created yet.</p>    
+                        <a class="btn-secondary" href="{{url_for('management.manage_diet', patient_id = request.args.get('patient_id'))}}"> Create Diet </a>  
+                    </div>  
+                {% endif %}   
+            {%else%}
+            <h3> Diet </h3>
+            <p class="blank"> You don't have any associated patients. </p>
+            {%endif%}
+        {%endif%}
+
+        {% if current_user.role == 'patient'%}
+        <div class="title">
+            <h3> Your Diet </h3>
+            {% if nutritionists %}
+                <p> Nutritionist: {{ name }} </p>
+            {%else%}
+                <p> Ask your nutritionist to add you through your email to begin managing your diet. </p>
+            {%endif%}
+        </div>
+        {%endif%}  
+        
+        
         {% if diet %}
+            {% if current_user.role == 'nutritionist'%}
+                <!-- Create/Edit Diet -->
+                <a href="{{url_for('management.manage_diet', patient_id = request.args.get('patient_id'))}}"> Edit Diet </a>
+            {%endif%}
 
-            <!-- A div for each Meal Type -->
-            {% for meal in meals %}
-                <div class="meal">
-
-                    <!-- Meal Title -->
-                    <h3>{{meal.capitalize()}}</h3>
-
-                    <!-- Meal Combinations -->
-                    <div class="combinations">
-                        <!-- A div for each Combination -->
-                        {% for i in range(1,4) %}
-                            <div class="combination">
-
-                                <!-- Combination Title -->
-                                <h3> Combination {{i}}</h3>
-
-                                <!-- Items list for each combination -->
-                                <div class="items">
-                                {% for item in diet %}
-                                    {%if item.meal_type == meal and item.combination == i|string %}
-                                        <p> {{ item.item }}</p>
-                                    {%endif%}
-                                {%endfor%}
+            <!-- Content Section -->
+            <section class="diet-content">
+                {% for meal in meals %}
+                    <div class="meal">
+                        <!-- Meal Title -->
+                        <h3>{{meal.capitalize()}}</h3>
+                        <!-- Meal Combinations -->
+                        <div class="combinations">
+                            <!-- A div for each Combination -->
+                            {% for i in range(1,4) %}
+                                <div class="combination">
+                                    <!-- Combination Title -->
+                                    <h3> Combination {{i}}</h3>
+                                    <!-- Items list for each combination -->
+                                    <div class="items">
+                                        {% for item in diet %}
+                                            {%if item.meal_type == meal and item.combination == i|string %}
+                                                <p> {{ item.item }}</p>
+                                            {%endif%}
+                                        {%endfor%}
+                                    </div>
                                 </div>
-                            </div>
-                        {%endfor%}
-                    </div>   
-                </div>
-            {%endfor%}
-        {% else %}
-                <p> A diet hasn't been created yet.</p>
-        {% endif %}
-        </section>
-    {% endif %}
+                            {%endfor%}
+                        </div>   
+                    </div>
+                {%endfor%}  
+        {% endif %}    
+    </section>
+
+</section>
 
 {% endblock %}

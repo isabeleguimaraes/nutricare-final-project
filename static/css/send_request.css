@@ -1,0 +1,21 @@
+/* Linking Page */
+
+i {
+    padding-right: 0.5rem;
+}
+
+.heading h2 p {
+    padding: 0;
+}
+
+.patient-linking {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.patient-linking form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

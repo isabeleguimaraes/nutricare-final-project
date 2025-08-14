@@ -1,0 +1,40 @@
+.creating-diet {
+    display: flex;
+    flex-direction: column;
+}
+
+.combination {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.combinations {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; 
+}
+
+.meal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.test{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.creating-diet form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

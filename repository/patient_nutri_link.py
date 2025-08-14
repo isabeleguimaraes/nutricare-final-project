@@ -1,4 +1,4 @@
-from helpers import read_all_from_db, read_one_from_db
+from helpers import read_all_from_db, read_one_from_db, write_to_db
 
 # Get Patients Linked to Nutritionist
 def get_linked_patients(nutri_id):
@@ -40,3 +40,6 @@ def find_link_id(nutri_id, patient_id):
     link_id = read_one_from_db("SELECT id FROM patient_nutri_link WHERE nutri_id = ? and patient_id = ?", (nutri_id, patient_id))[0]
 
     return link_id
+
+def delete_patient(nutri_id, patient_id):
+    write_to_db("DELETE FROM patient_nutri_link WHERE nutri_id = ? AND patient_id = ?", (nutri_id, patient_id))

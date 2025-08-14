@@ -6,7 +6,7 @@ def get_patient_diet(patient_id, nutri_id):
 
      # Find Patient patient_nutri_link Data
     results = read_all_from_db("""
-                    SELECT meal_type, combination, item 
+                    SELECT meal_type, combination, item
                     FROM diet
                     JOIN patient_nutri_link ON diet.link_id = patient_nutri_link.id
                     WHERE patient_nutri_link.patient_id = ? AND patient_nutri_link.nutri_id = ?

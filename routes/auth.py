@@ -68,7 +68,7 @@ def register():
 
             # Log In after successful registration and redirect to dashboard
             login_user(user)
-            return redirect("main.dashboard")
+            return redirect(url_for("main.dashboard"))
 
     return render_template("register.html", errors=errors)
 
@@ -83,32 +83,35 @@ def login():
         
         email = request.form.get("email")
         password = request.form.get("password")
-        
-        # Retrieve the user information based on email
-        user_data = get_user_info_by_email(email)
-        
-        # Verify if user exists and password matches
-        if user_data and check_password_hash(user_data["hash"], password):
-            # If everything correct, associate this user with the user in session and log them in
-            user = User(
-                    id=user_data["id"], 
-                    name=user_data["name"],
-                    email=user_data["email"],
-                    hash=user_data["hash"],
-                    role=user_data["role"]
-                    )
-            login_user(user)
+
+        if not email or not password:
+            error = "Email and password required."
+        else:        
+            # Retrieve the user information based on email
+            user_data = get_user_info_by_email(email)
+            
+            # Verify if user exists and password matches
+            if user_data and check_password_hash(user_data["hash"], password):
+                # If everything correct, associate this user with the user in session and log them in
+                user = User(
+                        id=user_data["id"], 
+                        name=user_data["name"],
+                        email=user_data["email"],
+                        hash=user_data["hash"],
+                        role=user_data["role"]
+                        )
+                login_user(user)
             
             # Redirect logged in user to dashboard page
-            return redirect(url_for('main.dashboard'))
-        else:
-            # Error message in html
-            error = "Invalid Username or Password."
+                return redirect(url_for('main.dashboard'))
+            else:
+                # Error message in html
+                error = "Invalid Username or Password."
 
     return render_template("login.html", error = error)
 
 #Log Out 
-@auth_bp.route("/logout")
+@auth_bp.route("/logout", methods= ["POST"])
 def logout():
     logout_user()
-    return redirect("/login")
+    return redirect(url_for("auth.login"))
