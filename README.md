@@ -57,7 +57,7 @@ werkzeug
 | `static/`     | CSS styles and images      |
 | `templates/`  | HTML templates             |
 | `database/`   | SQLite database files      |
-| `repository`  | Database transaction logic |
+| `repository/`  | Database transaction logic |
 
 ## Routes Overview
 - `auth.py` Login, logout, and registration
@@ -66,7 +66,7 @@ werkzeug
 - `requests.py` Patient-nutritionist request handling
 
 ## Static
-- `/css/` Page-specific stylesheetsw
+- `/css/` Page-specific stylesheets
 - `/images/` App images
 
 ## Templates
@@ -76,7 +76,7 @@ werkzeug
 - `login.html` Login form
 - `register.html` Registration form
 - `send_request.html` Request form for nutritionists
-- `partials/dashboard_sidebar.html` Sidebar with conditionals
+- `partials/dashboard_sidebar.html` Dashboard Sidebar with conditionals
 
 ## Database
 - `nutricare.db` SQLite database file

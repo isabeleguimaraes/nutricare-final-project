@@ -26,3 +26,13 @@ i {
     flex-direction: column;
     gap: 1rem;
 }
+
+@media (max-width: 768px) {
+.patient-linking{
+    padding: 0 2rem 2rem 2rem;
+}
+
+.patient-linking form {
+    align-items: center;
+}
+}
