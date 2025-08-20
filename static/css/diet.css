@@ -1,6 +1,8 @@
 .creating-diet {
+    padding: 5rem;
     display: flex;
     flex-direction: column;
+    gap: 3rem;
 }
 
 .combination {
@@ -24,17 +26,30 @@
 .meal {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1.5rem;
 }
 
 .test{
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    width: 100%;
+    gap: 4rem;
 }
 
 .creating-diet form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2rem;
+}
+
+.diet-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.btn-diet {
+    width: 100%;
+    cursor: pointer;
 }

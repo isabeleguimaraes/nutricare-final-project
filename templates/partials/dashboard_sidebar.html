@@ -1,0 +1,67 @@
+ <!-- SIDEBAR -->
+
+{% if user.role == 'nutritionist' %}
+<!-- Sidebar for Nutritionist -->
+
+<div class="side-bar">
+  <!-- Intro section -->
+  <div class="side-bar-intro">
+    <h3>Your Patients</h3>
+    <p>Select a patient to view their diet or add a new one.</p>
+    <!-- Add patient button -->
+    <a class="btn-secondary" href="{{ url_for('requests.send_request') }}">Add a Patient</a>
+  </div>
+
+  {% if patients %}
+  <ul class="side-bar-list">
+    {% for patient in patients %}
+    <!-- Each patient is a list item -->
+    <li class="side-bar-item">
+      <!-- Full-width clickable patient link -->
+      <a class="side-bar-link {% if request.args.get('patient_id') |int == patient.id %}side-bar-link-selected{% endif %}"
+         href="{{ url_for('main.dashboard', patient_id=patient.id, nutri_id=current_user.id) }}">
+        {{ patient.name }}
+      </a>
+
+      <!-- Remove button aligned right -->
+      <form method="POST" action="{{ url_for('requests.remove_patient', patient_id=p_id, nutri_id=n_id) }}">
+        <input name="removed_patient" type="hidden" value="{{ patient.id }}">
+        <button class="remove-button" type="submit">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endif %}
+
+
+ <!-- Patient Sidebar -->
+{% if user.role == 'patient' %}
+<!-- Sidebar for Patient -->
+<div class="side-bar">
+  <div class="side-bar-intro">
+    <h3>Your Nutritionists</h3>
+    {% if nutritionists %}
+      <p>Select a nutritionist to view their created diet.</p>
+    {% else %}
+      <p>Ask a nutritionist to add you as a patient to see your diet.</p>
+    {% endif %}
+  </div>
+
+  {% if nutritionists %}
+  <ul class="side-bar-list">
+    {% for nutri in nutritionists %}
+    <li class="side-bar-item">
+      <!-- Full-width clickable nutritionist link -->
+      <a class="side-bar-link {% if request.args.get('nutri_id')|int == nutri.id %} side-bar-link-selected {%endif%}" href="{{ url_for('main.dashboard', patient_id=current_user.id, nutri_id=nutri.id) }}">
+        {{ nutri.name }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endif %}

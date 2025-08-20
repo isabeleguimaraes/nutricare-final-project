@@ -6,21 +6,27 @@
 {% block content %}
 
 <section class="creating-diet">
-<h2> Create a Diet </h2>
-<p> Create the combinations for each meal and let your patient know the quantity.</p>
+    <div class="diet-title">
+        <a class="btn-link" href="{{url_for('main.dashboard')}}"> <i class="fa-solid fa-arrow-left"></i> Return to Dashboard</a>
+        <div>
+            <h2> Create a Diet </h2>
+            <p> Create meal combinations for each meal and provide your patient with the recommended portions..</p>
+        </div>
+        
+    </div>
+
 
 <form method="POST" action="{{url_for('management.manage_diet', patient_id = patient_id, nutri_id = nutri_id)}}">
     <input type="hidden" name="patient_id" value="{{ patient_id }}">
-    <section class="test">
+    <section class="show-meals">
     {% for meal in meals %}
-        <section class="meal">
+        <section class="show-meal">
             <h3> {{meal.capitalize()}} </h3>
-            <section class = "combinations">
-            {% for j in range(1,4)%}
-            
-                <div class="combination">
+            <section class = "show-combinations">
+            {% for j in range(1,4)%}  
+                <div class="show-combination">
                     <label for="meal"> Combination {{j}}</label>
-                    <div class="inputs"> 
+                    <div class="show-combination-items"> 
                         {% set meal_items = diet 
                                 | selectattr('meal_type', 'equalto', meal)
                                 | selectattr('combination', 'equalto', j|string) 
@@ -38,7 +44,7 @@
     {% endfor %}
     </section>
            
-    <button class="btn-primary" type="submit">Save Diet</button>
+    <button class="btn-primary btn-diet" type="submit">Save Diet</button>
 </form>
 </section>
 

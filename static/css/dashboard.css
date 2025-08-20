@@ -1,62 +1,268 @@
-.side-menu {
-    width: 250px;
-    height: 80vh;
-    background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.08);
-    position: fixed;
-    left: 0;
-    overflow-y: auto;
+/* ------- PAGE CONTAINER ------- */
+.d-main-container {
+    height: 100vh;
+    width: 100vw; 
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    border-radius: 8px;
 }
 
-.side-menu ul {
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgb(238, 238, 238);
-    border-radius: 5px;
-}
+    /* ------- Logout Div ------- */
+    .logout{
+        display: flex;
+        justify-content: flex-end;
+        padding: 2.5rem;
+    }
 
-#patient-name {
-  text-decoration: none;
-  color: black;
+    /* ------- Logout Button ------- */
     
+    .logout button {
+    width: 100px;
+    background-color: #e63946; /* vermelho */
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout button:hover {
+    background-color: #d62828;
+    transform: translateY(-2px);
+    }
+
+    .logout button:active {
+    transform: translateY(0);
+    background-color: #b71c1c;
+    }
+
+    /* ------- Content ------- */
+    .d-content {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        column-gap: 5rem;
+        height: 100%;
+        width: 100%;
+    }
+
+/* ------- SIDEBAR ------- */
+
+    /* ------- Container ------- */
+    .side-bar {
+            height: 80vh;
+            overflow-y: auto;
+            background-color: var(--green);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-direction: column; 
+            
+        }
+
+    /* ------- Text Intro ------- */
+    .side-bar-intro{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 2rem 1rem;
+            }
+
+    .side-bar-intro h3, .side-bar-intro p {
+                color: white;
+            }
+
+
+    /* ------- Sidebar List ------- */
+    .side-bar-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0 1rem;
+                list-style: none;
+                margin: 0;
+            }
+
+    /* Sidebar Item (link + remove button) */
+    .side-bar-item{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+    /* ------- Links ------- */
+    .side-bar-link {
+        display: block;
+        width: 100%;
+        background-color: transparent;
+        padding: 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        box-sizing: border-box;
+        flex: 1;            
+                }
+
+.side-bar-link:hover {
+  background-color: rgba(20, 77, 42, 0.7);
+  color: rgb(255, 255, 255);
 }
 
-.side-menu button {
-    background-color: rgb(228, 120, 120);
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem;
-    cursor: pointer;
+/* Selected state for active patient/nutritionist */
+.side-bar-link-selected {
+  background-color: rgba(191, 255, 216, 0.7);
+  font-weight: 500;
+  color: rgb(0, 0, 0);
 }
 
-.side-menu button:hover {
-    background-color: rgb(211, 47, 47);
+/* Remove button container */
+.rmv-btn-div {
+  display: flex;
+  align-items: center;
 }
-.h4 {
+
+
+/* Remove button */
+.remove-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.remove-button:hover {
+  background-color: rgba(196, 196, 196, 0.671);
+}
+
+.remove-button i {
+  font-size: 16px;
+  color: white !important; 
+  padding: 0;
+}
+
+
+            /* ------- Main Content (Text/Diet) ------- */
+            .d-main-content{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;    
+                    padding: 0 5rem 5rem 0;
+                    box-sizing: border-box;
+            }
+
+                /* ------- Main Content Text ------- */
+                .d-text{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2.5rem;
+                }
+
+                    /* ------- Intro ------- */
+                    .d-intro{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+
+                    /* ------- Diet Text ------- */
+                    .d-diet{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+
+                    .d-diet-edit{
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 3rem;
+                    }
+
+                    .d-diet-create{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+
+                    /* ------- Patient: Requests ------- */
+                    .d-requests{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;   
+                    }
+
+                    .request-item{
+                        display: flex;
+                        gap: 2rem;
+                        align-items: center;
+                    }
+
+                    .request-item form {
+                        display: flex;
+                        gap: 1rem;
+                    }
+
+                    .small-btn{
+                        border: none;
+                        border-radius: 6px;
+                        padding: 0.5rem 0.8rem;
+                        cursor: pointer;
+                    }
+                    .small-btn:hover {
+                        transform: scale(0.95);
+                    }
+
+                    .btn-red {
+                        background-color: #cf7171;
+                        width: 100px;
+                    }
+
+                    .btn-green {
+                        background-color: rgb(108, 204, 108);
+                        width: 100px;
+                    }
+
+                    /* ------- Your Diet ------- */
+                    .diet-text-name{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.5rem;
+                    } 
+
+                    .diet-text{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1.5rem;
+                    }
+
+                    .diet-title {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 3rem;
+                    }
+
+                    .diet-title p{
+                        margin-top: 1rem;
+                        margin-bottom: 2rem;
+                    }
+
+                    .request{
+                        width: 100%;
+                    }
+                    
+                     
+
+
+        .h4 {
     font-size: 20px;
     margin: 0;
 }
 
-.btn-menu{
-    width: 40px;
-    font-size: 14px;
-    padding: 0.4rem;
-    color: white;
-}
-
-.container-dash {
-    
-    width: 1200px;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
+.h5{
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
 }
 
 .title h3 {
@@ -67,41 +273,72 @@
     margin-bottom: 2rem;
 }
 
-.logout{
-    position: fixed;
-    right: 0;
-    top: 0;
-    padding: 2rem;
-}
-
-.logout button {
-  width: 100px;
-  background-color: #e63946; /* vermelho */
-  color: white;
-  padding: 10px 20px;
-  border: none; /* remove borda padrão */
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-block;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.logout button:hover {
-  background-color: #d62828;
-  transform: translateY(-2px);
-}
-
-.logout button:active {
-  transform: translateY(0);
-  background-color: #b71c1c;
-}
-
 
 .create-diet {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
+
+.create-diet-area{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+}
+
+
+/* ---------------- SHOW DIET ------------------- */
+
+.show-meals{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 3rem;
+}
+
+.show-meal{
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+align-items: center;
+padding: 0;
+}
+
+.show-meal h3{
+    font-size: 22px
+}
+.show-combinations{
+    border: 1px solid gray;
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.show-combination {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.show-combination h3{
+    font-size: 18px;
+}
+
+
+.show-combination-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.show-combination-item {
+    padding: 0.5rem 0.8rem;
+    background-color: rgb(231, 231, 231);
+    border-radius: 6px
+}
+
 

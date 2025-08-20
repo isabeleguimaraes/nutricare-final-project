@@ -13,7 +13,6 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding:  5rem;
 }
 
 ul {
@@ -22,29 +21,50 @@ ul {
 
 /* Buttons */
 
-.btn-primary {
-  background-color: var(--green);
-  color: var(--primary-color);
-  padding: 0.8rem 0.8rem;
-  border-radius: 8px; 
-  font-weight: 600;
-  font-size: 1rem;
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  padding: 0.5rem 0.8rem;        /* mesma altura e espaçamento */
+  border-radius: 4px;          /* mesma borda arredondada */
+  font-weight: 500;
+  font-size: 16px;
   text-decoration: none;
   border: none;
-  min-width: 8rem;
+  outline: none;
   text-align: center;
   box-sizing: border-box;
-  width: 10rem;
+  width: 100%;
+  max-width: 200px;             /* mesma largura ou ajustar para 100% se necessário */
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* mesma sombra */
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--green);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #16752c;
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  border: 2px solid gray;
-  padding: 0.8rem;
-  text-decoration: none;
-  border-radius: 8px;
+  background-color: white;
   color: black;
-  width: 100px;
+}
 
+.btn-secondary:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.btn-secondary:hover {
+  background-color: #f0f0f0; 
+  transform: translateY(-2px); /* mesma elevação que o primário */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  cursor: pointer;
 }
 .btn-link {
   color: black;
@@ -79,6 +99,7 @@ h2 {
 h3 {
     font-size: 24px;
     font-weight: 500;
+    margin: 0;
 }
 
 p {

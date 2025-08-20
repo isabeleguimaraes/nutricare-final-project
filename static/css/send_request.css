@@ -8,10 +8,17 @@ i {
     padding: 0;
 }
 
+.heading{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .patient-linking {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-top: 6rem;
 }
 
 .patient-linking form {

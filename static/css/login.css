@@ -1,6 +1,7 @@
 /* Main Container */
 
 .login-container {
+    padding-top: 4rem;
     width: 1200px;
     height: 800px;
     padding-right: 5rem;
