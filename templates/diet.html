@@ -16,7 +16,7 @@
     </div>
 
 
-<form method="POST" action="{{url_for('management.manage_diet', patient_id = patient_id, nutri_id = nutri_id)}}">
+<form method="POST" action="{{url_for('management.manage_diet', patient_id = patient_id, nutri_id = nutri_id)}}" >
     <input type="hidden" name="patient_id" value="{{ patient_id }}">
     <section class="show-meals">
     {% for meal in meals %}

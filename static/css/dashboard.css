@@ -118,7 +118,8 @@
 
 .remove-button i {
     font-size: 16px;
-    color: white !important; 
+    color: white !important;
+    margin-left: 0.5rem; 
 }
 
 /* ------- Main Content ------- */
@@ -246,6 +247,10 @@
     padding: 0.5rem 0.8rem;
     background-color: rgb(231, 231, 231);
     border-radius: 6px;
+}
+
+.space-text{
+    margin-top: 1rem;
 }
 
 /* ------------------- MEDIA QUERIES ------------------- */

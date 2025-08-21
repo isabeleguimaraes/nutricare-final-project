@@ -10,7 +10,7 @@
         <p> Send a request to a patient to access their diet, progress and send messages.</p>
     </div>
 
-    <form action="{{url_for('requests.send_request')}}" method="POST">
+    <form action="{{url_for('requests.send_request')}}" method="POST" autocomplete="off">
         <input type="text" name="email" placeholder="Patient's email">
         <button class="btn-primary" type="submit"> Send Request</button>
         <p class="{{ msg_type }}"> {{ message }} </p>
