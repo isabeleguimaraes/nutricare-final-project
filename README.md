@@ -1,7 +1,7 @@
 # NutriCare Platform
 
 ## Video Demo
-
+https://www.youtube.com/watch?v=SFr9xVNK6AU
 
 ## Description:
 NutriCare is a web platform designed for nutritionists and patients to create, manage, and share personalized diets. This project was developed as the final assignment for Harvard's CS50x: Introduction to Computer Science.
