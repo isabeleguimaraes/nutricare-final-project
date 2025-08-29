@@ -1,4 +1,8 @@
 import sqlite3
+import os
+
+#Create database directory
+os.makedirs('database', exist_ok=True)
 
 #Create a connection with the database
 conn = sqlite3.connect('database/nutricare.db')
